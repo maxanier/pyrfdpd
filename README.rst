@@ -23,6 +23,7 @@ Installation
 ============
 
 ``$ python3 -m pip install pyrfdpd``
+``$ python -m pip install -e ./pyrfdpd``
 
 Kick-Start
 ==========
