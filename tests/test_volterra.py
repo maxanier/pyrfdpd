@@ -73,14 +73,14 @@ logger.info(f"{'-'*30}")
 # Initial test
 visa.down_signal(sg_brand, xorg, fc, fs, pow, sg_ip, logger=logger)
 yraw = visa.collect_signal(sa_brand, fc, fs, att, sa_ip, logger=logger)
-yorg = align.align(xorg, yraw)
+yorg = align.align(xorg, yraw) # Original (non-predistorted) PA output
 pa_input, pa_output = xorg.copy(), yorg.copy()
 
 # DPD iteration
 for idx in range(iteration):
     logger.debug(f"Start the {idx+1}th iteration")
     cc = model_e(pa_output, pa_input)
-    pa_input = model_v(xorg, cc)
+    pa_input = model_v(xorg, cc) # Generate new input based on new coefficients
     visa.down_signal(sg_brand, pa_input, fc, fs, pow, sg_ip, logger=logger)
     pa_output = visa.collect_signal(sa_brand, fc, fs, att, sa_ip, logger=logger)
     pa_output = align.align(xorg, pa_output)

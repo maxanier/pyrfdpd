@@ -28,7 +28,7 @@ def MP_e(x_target: np.ndarray, y_target: np.ndarray, M, K, ratio=1)->np.ndarray:
 
     Args:
         x_target: the PA input signal,
-        y_target: the PA output signal
+        y_target: the measured PA output signal
         M: memory depth
         K: non-linearity order,
         ratio: ratio of samples for extraction
@@ -58,7 +58,7 @@ def MP_v(x_target: np.ndarray, coef: np.ndarray, M, K)->np.ndarray:
     designed by Qianyun Lu, Feb. 2, 2018, qianyun.lu@seu.edu.cn
     
     Args:
-        x_target: the PA input signal
+        x_target: the PA input signal to be pre-distorted
         coef: the extracted coefficients
         M: memory depth
         K: non-linearity order,

@@ -23,7 +23,7 @@ def GMP_e(x_target: np.ndarray, y_target: np.ndarray, K: list, L: list, M: list,
     This is the coefficient extraction file based on GMP DPD
     designed by Qianyun Lu, Oct 12, 2019, qianyun.lu@seu.edu.cn
     Refer to following paper for more information: 
-    [1] https://ieeexplore.ieee.org/document/1703853
+    [1] https://ieeexplore.ieee.org/document/1703853 (10.1109/TSP.2006.879264)
 
     Args:
         x_target: the PA input signal,
@@ -70,6 +70,8 @@ def GMP_e(x_target: np.ndarray, y_target: np.ndarray, K: list, L: list, M: list,
     X = np.hstack((X_align, X_lag, X_lead))
     X[np.isnan(X)] = 0 # Remove NaN
     XH = np.conjugate(X.T)
+    # Calculate coefficients based on equation (29), extended by +0.000001*:
+    # $w=(Y^H Y)^{-1} Y^H x$, where w are the coefficients, $Y$ equals `X` and $x$ equals `y_target` in code.
     coef = np.linalg.pinv(XH.dot(X) + 0.000001*np.eye(X.shape[1])).dot(XH).dot(y_target)
     return coef
 
@@ -79,7 +81,7 @@ def GMP_v(x_target: np.ndarray, coef, K: list, L: list, M: list)->np.ndarray:
     designed by Qianyun Lu, Oct. 12, 2018, qianyun.lu@seu.edu.cn
     
     Args:
-        x_target: the PA input signal
+        x_target: the PA input signal to be pre-distorted
         coef: the extracted coefficients
         K: non-linearity order
         L: lagging depth
