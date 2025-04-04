@@ -20,18 +20,21 @@ def psd(signals: dict, fs: float = 122.88e6, filename: str = "psd.png", lang="en
     plt.savefig(filename)
     plt.close()
 
+def _scatter_amam(x: np.ndarray, y: np.ndarray, name=None):
+    signal = y / max(abs(y))
+    plt.scatter(abs(x), abs(signal), marker=".", s=10, label=name)
 
-def amam(x, y, filename="amam.png", lang="en"):
+def amam(x, y: [dict | list | np.ndarray], filename="amam.png", lang="en"):
     x = x / max(abs(x))
     if isinstance(y, dict):
         for name, signal in y.items():
-            signal = signal / max(abs(signal))
-            plt.scatter(abs(x), abs(signal), marker=".", s = 10, label=name)
+            _scatter_amam(x, signal, name)
         plt.legend(loc="upper left")
-    if isinstance(y, list):
+    elif isinstance(y, list):
         for signal in y:
-            signal = signal / max(abs(signal))
-            plt.scatter(abs(x), abs(signal), marker=".", s = 10)
+            _scatter_amam(x, signal)
+    else:
+        _scatter_amam(x, y)
     if (lang == "en"):
         plt.xlabel("Normalized Input Amplitude")
         plt.ylabel("Normalized Output Amplitude")
@@ -44,18 +47,22 @@ def amam(x, y, filename="amam.png", lang="en"):
     plt.savefig(filename)
     plt.close()
 
+def _scatter_ampm(x: np.ndarray, y: np.ndarray, name=None):
+    signal = y / max(abs(y))
+    plt.scatter(abs(x), np.angle(x / signal, deg=True), marker=".", s=10, label=name)
 
-def ampm(x, y, filename="ampm.png", lang="en"):
+def ampm(x, y: [dict | list | np.ndarray], filename="ampm.png", lang="en"):
     x = x / max(abs(x))
     if isinstance(y, dict):
         for name, signal in y.items():
-            signal = signal / max(abs(signal))
-            plt.scatter(abs(x), np.angle(x / signal, deg=True), marker=".", s = 10, label=name)
+            _scatter_ampm(x, signal, name)
         plt.legend(loc="upper left")
-    if isinstance(y, list):
+    elif isinstance(y, list):
         for signal in y:
-            signal = signal / max(abs(signal))
-            plt.scatter(abs(x), np.angle(x / signal, deg=True), marker=".", s = 10)
+            _scatter_ampm(x, signal)
+    else:
+        _scatter_ampm(x, y)
+
     if (lang == "en"):
         plt.xlabel("Normalized Input Amplitude")
         plt.ylabel("Phase Difference (degree)")
